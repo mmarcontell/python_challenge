@@ -1,0 +1,64 @@
+import os
+import csv
+
+file_path = os.path.join("Resources", "election_data.csv")
+output_analysis = os.path.join("Analysis", "Final_Poll_Analysis.txt")
+
+with open(file_path, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter = ',')
+    header = next(csvreader)
+
+#create empty lists to append as we read through the file
+    voter  = []
+    candidate = []
+
+    for row in csvreader:
+        voter.append(int(row[0]))
+        candidate.append(row[2])
+
+    total_voters = len(voter)
+
+#find the unique names of candidates
+    total_candidate = []
+    for name in candidate:
+        if name not in total_candidate:
+            total_candidate.append(name)
+        
+    Stockham = total_candidate[0]
+    DeGette = total_candidate[1]
+    Doane = total_candidate[2] 
+
+#find the number of votes each candidate recieved
+    total_Stockham_votes = 0
+    total_DeGette_votes = 0
+    total_Doane_votes = 0
+    for name in candidate:
+        if name == Stockham:
+            total_Stockham_votes = total_Stockham_votes + 1
+        elif name == DeGette:
+            total_DeGette_votes = total_DeGette_votes + 1
+        else:
+            total_Doane_votes = total_Doane_votes + 1
+
+#find percent by dividing candidate votes by total votes
+    percent_Stockham = ((total_Stockham_votes/total_voters)*100)
+    percent_DeGette = (total_DeGette_votes/total_voters)*100
+    percent_Doane = (total_Doane_votes/total_voters)*100
+
+#determine winner
+    if total_Stockham_votes > total_Doane_votes and total_Stockham_votes > total_DeGette_votes:
+        winner = Stockham
+    elif total_DeGette_votes > total_Doane_votes and total_DeGette_votes > total_Stockham_votes:
+        winner = DeGette
+    elif total_Doane_votes > total_DeGette_votes and total_Doane_votes > total_Stockham_votes:
+        winner = Doane
+    
+     
+print((f'Election Results\n --------------------------------\n Total Votes: {total_voters}\n --------------------------------\n {Stockham}: {round(percent_Stockham,3)}% ({total_Stockham_votes})\n {DeGette}: {round(percent_DeGette,3)}% ({total_DeGette_votes})\n {Doane}: {round(percent_Doane,3)}% ({total_Doane_votes})\n --------------------------------\n Winner: {winner}\n--------------------------------'))
+
+with open(output_analysis, 'w', newline = '') as txt:
+    txt.write(f'Election Results\n --------------------------------\n Total Votes: {total_voters}\n --------------------------------\n {Stockham}: {round(percent_Stockham,3)}% ({total_Stockham_votes})\n {DeGette}: {round(percent_DeGette,3)}% ({total_DeGette_votes})\n {Doane}: {round(percent_Doane,3)}% ({total_Doane_votes})\n --------------------------------\n Winner: {winner}\n--------------------------------')
+
+
+
+
